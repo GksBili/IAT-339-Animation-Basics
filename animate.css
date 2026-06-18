@@ -1,62 +1,122 @@
-body {
-    margin: 0;
-    padding: 20px;
+/*
+  Using classes on our inline SVG, we can change the styling of different SVG elements. In this case, we can use SVG's "fill" property to change the colour of the fill on our unicorn.
+*/
+.unicorn-fill {
+  fill: #AAA;
 }
 
-.square {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 20px;
+
+/*
+  Our SVG was built using groups – they appear as <g> in our SVG code – which means that we can apply a class to that group and then select the child to style it. In this case we select the <polygon> which forms the horn to change the styling of it.
+*/
+.unicorn-horn-1 polygon {
+  fill: pink;
+
+  /*
+    To call on an animation, we must refer to its 'name' as specified by @keyframes (further below).
+
+    A good resource for all the animation properties we use in this tutorial is https://developer.mozilla.org/en-US/docs/Web/CSS/animation
+  */
+  animation-name: horn-1-rainbow;
+
+  /*
+    Setting a duration over which the animation should run.
+  */
+  animation-duration: 1s;
+
+  /*
+    We can set a number of iterations for which we want the animation to run (in this case, forever).
+  */
+  animation-iteration-count: infinite;
+
+  /*
+    Because our animation runs 'from' and 'to' (see @keyframes further below), by default the switch between the beginning and end of the animation is not particularly smooth. In this case, we set the animation to alternate directions, which will allow it to smoothly transition back-and-forth.
+  */
+  animation-direction: alternate;
 }
 
-/* Red Square */
-.red {
-    background-color: red;
-    animation: spin 3s linear infinite;
+
+/*
+  Below we do much of the same as with did with .unicorn-horn-2, we just call on a slightly different animation for this portion of the horn.
+*/
+.unicorn-horn-2 polygon {
+  fill: blue;
+
+  animation-name: horn-2-rainbow;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+
+
+
+.unicorn-star {
+  fill: yellow;
+
+  /*
+    The shorthand below specifies: duration easing iteration-count animation-name
+  */
+  animation: 2s ease-in-out infinite star-pulse;
 }
 
-/* Blue Square */
-.blue {
-    background-color: blue;
-    animation: colorChange 3s linear infinite;
+
+/*
+  SVG's work with a couple of scales to determine their proportions (i.e. the viewBox attribute, how it is being rendered on the page), so to prevent our star from attempting to use the wrong scale when being 'transformed', we need to set an origin that specifies its center as the transformation point.
+
+  Note, that as of creating this tutorial, this animation will not work in Firefox for reasons discussed in https://bugzilla.mozilla.org/show_bug.cgi?id=1209061#c6
+*/
+polygon {
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
 }
 
-@keyframes colorChange {
-    0% {
-        background-color: blue;
-    }
-    50% {
-        background-color: purple;
-    }
-    100% {
-        background-color: blue;
-    }
+
+/*
+  @keyframes
+*/
+@keyframes horn-1-rainbow {
+  from {
+    fill: pink;
+  }
+
+  to {
+    fill: purple;
+  }
 }
 
-/* Yellow Square */
-.yellow {
-    background-color: yellow;
-    position: relative;
-    animation: slide 3s ease-in-out infinite;
+@keyframes horn-2-rainbow {
+  from {
+    fill: blue;
+  }
+
+  to {
+    fill: green;
+  }
 }
 
-@keyframes slide {
-    0% {
-        left: 0;
-    }
-    50% {
-        left: calc(100vw - 200px);
-    }
-    100% {
-        left: 0;
-    }
+
+
+@keyframes star-pulse {
+  0% {
+    fill: yellow;
+    transform: scale(1) rotate(0deg);
+  }
+
+  40% {
+    fill: red;
+    transform: scale(2) rotate(0deg);
+  }
+
+  60% {
+    fill: red;
+    transform: scale(2) rotate(360deg);
+  }
+
+  100% {
+    fill: yellow;
+    transform: scale(1) rotate(360deg);
+  }
 }
